@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, it, vi } from "vitest";
 import App from "./App";
@@ -166,9 +166,50 @@ it("locks controls during requests and restores them", async () => {
   await click("Calculate");
   expect(screen.getByLabelText("Expression")).toBeDisabled();
   expect(screen.getByRole("button", { name: "Clear" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Calculate" })).toBeDisabled();
+  expect(screen.getByLabelText("Expression")).toHaveValue("2+3");
+  expect(screen.getByLabelText("Expression").parentElement).not.toHaveClass(
+    "has-result",
+  );
+  expect(screen.getByRole("status")).toBeEmptyDOMElement();
+  expect(screen.queryByText("Calculating…")).not.toBeInTheDocument();
+  await click("Calculate");
+  await userEvent.keyboard("{Enter}=");
+  expect(fetch).toHaveBeenCalledTimes(1);
   resolve(new Response('{"result":"5"}'));
   await screen.findByText("5", { selector: '[role="status"]' });
   expect(screen.getByLabelText("Expression")).toBeEnabled();
+});
+it("keeps the displayed result while recalculating", async () => {
+  let resolve!: (response: Response) => void;
+  vi.stubGlobal(
+    "fetch",
+    vi
+      .fn()
+      .mockResolvedValueOnce(new Response('{"result":"5"}'))
+      .mockImplementationOnce(
+        () =>
+          new Promise<Response>((done) => {
+            resolve = done;
+          }),
+      ),
+  );
+  render(<App />);
+  fill("2+3");
+  await click("Calculate");
+  await screen.findByText("5", { selector: '[role="status"]' });
+  await click("Calculate");
+  expect(screen.getByRole("status")).toHaveTextContent("5");
+  expect(screen.getByLabelText("Expression")).toHaveValue("2+3");
+  expect(screen.getByLabelText("Expression").parentElement).toHaveClass(
+    "has-result",
+  );
+  expect(screen.queryByText("Calculating…")).not.toBeInTheDocument();
+  resolve(new Response('{"result":"5"}'));
+  await waitFor(() =>
+    expect(screen.getByRole("button", { name: "Calculate" })).toBeEnabled(),
+  );
+  expect(screen.getByRole("status")).toHaveTextContent("5");
 });
 it("handles network errors", async () => {
   vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));

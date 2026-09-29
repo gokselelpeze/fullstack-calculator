@@ -143,13 +143,6 @@ textarea:focus-visible {
   text-align: right;
 }
 
-.pending {
-  color: #d9cfe1;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
 .keypad {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -220,10 +213,6 @@ textarea:focus-visible {
 .key:focus-visible {
   outline: 3px solid var(--sezzle-lilac);
   outline-offset: 2px;
-}
-
-fieldset:disabled {
-  opacity: 0.62;
 }
 
 fieldset:disabled button {

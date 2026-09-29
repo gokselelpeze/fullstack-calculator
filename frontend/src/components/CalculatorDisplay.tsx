@@ -3,7 +3,6 @@ import type { KeyboardEventHandler } from "react";
 type Props = {
   expression: string;
   result: string | null;
-  loading: boolean;
   error: string;
   onEdit: (value: string) => void;
   onKeyDown: KeyboardEventHandler<HTMLTextAreaElement>;
@@ -12,12 +11,11 @@ type Props = {
 export function CalculatorDisplay({
   expression,
   result,
-  loading,
   error,
   onEdit,
   onKeyDown,
 }: Props) {
-  const showResult = result !== null || loading;
+  const showResult = result !== null;
   return (
     <div className={`display ${showResult ? "has-result" : ""}`}>
       <label className="sr-only" htmlFor="expression">
@@ -42,7 +40,7 @@ export function CalculatorDisplay({
         aria-atomic="true"
       >
         {showResult && <span className="sr-only">Result: </span>}
-        {loading ? <span className="pending">Calculating…</span> : result}
+        {result}
       </div>
     </div>
   );

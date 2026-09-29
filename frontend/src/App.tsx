@@ -30,7 +30,6 @@ export default function App() {
             <CalculatorDisplay
               expression={calculator.expression}
               result={calculator.result}
-              loading={calculator.loading}
               error={calculator.error}
               onEdit={calculator.edit}
               onKeyDown={keyboard}

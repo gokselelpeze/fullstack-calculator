@@ -23,7 +23,6 @@ export function useCalculator() {
 
   const evaluate = useCallback(async () => {
     if (loading) return;
-    setResult(null);
     const validation = validateExpression(expression);
     setError(validation ?? "");
     if (validation) return;
@@ -31,6 +30,7 @@ export function useCalculator() {
     try {
       setResult(await calculate({ expression }));
     } catch (err) {
+      setResult(null);
       setError(err instanceof Error ? err.message : CALCULATION_FAILED_MESSAGE);
     } finally {
       setLoading(false);
