@@ -28,12 +28,12 @@ A five-second fuzz run including the new operators passed **635,229 executions**
 
 ## Frontend
 
-`npm run coverage`: **81 tests passed** across three files.
+`npm run coverage`: **82 tests passed** across three files.
 
 | Metric | Coverage |
 | --- | ---: |
 | Statements | 96.22% |
-| Branches | 94.92% |
+| Branches | 94.77% |
 | Functions | 100.00% |
 | Lines | 99.29% |
 
