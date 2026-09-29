@@ -31,7 +31,7 @@ export function CalculatorDisplay({
         spellCheck={false}
         autoComplete="off"
         aria-invalid={!!error}
-        aria-describedby={error ? "calculation-error" : "input-help"}
+        aria-describedby={error ? "calculation-error" : undefined}
         onChange={(event) => onEdit(event.target.value)}
         onKeyDown={onKeyDown}
       />

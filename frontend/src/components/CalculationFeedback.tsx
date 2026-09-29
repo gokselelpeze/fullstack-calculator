@@ -15,9 +15,6 @@ export function CalculationFeedback({ expression, error }: Props) {
           {error}
         </p>
       )}
-      <p id="input-help" className="help">
-        Powers before × and ÷, then + and −. Use parentheses to group.
-      </p>
       {expression.includes(Symbols.Percent) && (
         <p className="help">% divides the preceding value by 100.</p>
       )}
